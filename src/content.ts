@@ -3,7 +3,7 @@ import { travelPhotos, travelTrips } from './travel-data';
 export type Photo = { id: string; src: string; thumbnail?: string; alt: string; caption: string; width: number; height: number; placeholder?: boolean };
 export type Memory = { id: string; title: string; label: string; text: string; photo: Photo; placeholder?: boolean };
 export type Trip = { id: string; title: string; label: string; subtitle: string; story: string; keepsake: string; photos: Photo[]; timeNote?: string; placeholder?: boolean };
-export const siteConfig = { title: '猫狗的一周年', anniversary: null as string | null, timezone: 'Asia/Shanghai', coverPhoto: travelPhotos['hangzhou-lakeside-01'] as Photo | null, names: { cat: '小猫', dog: '小狗' }, music: assetUrl('/media/huai-nian-web.mp3') as string | null, video: assetUrl('/media/this-time-goodnight-v2.mp4') };
+export const siteConfig = { title: '猫狗的一周年', anniversary: null as string | null, timezone: 'Asia/Shanghai', coverPhoto: travelPhotos['hangzhou-lakeside-01'] as Photo | null, names: { cat: '小猫', dog: '小狗' }, musicTitle: '几分之几', music: assetUrl('/media/ji-fen-zhi-ji-web.mp3') as string | null, video: assetUrl('/media/this-time-goodnight-v2.mp4') };
 export const characters = [{ id:'cat',name:'小猫',image:assetUrl('/assets/phone_cat.webp'),person:null },{ id:'dog',name:'小狗',image:assetUrl('/assets/phone_dog.webp'),person:null },{ id:'panda',name:'胖达',image:assetUrl('/assets/panda.webp'),person:null },{ id:'pillowdog',name:'枕头狗',image:assetUrl('/assets/pillowdog.webp'),person:null }];
 export const memories: Memory[] = [
  { id:'memory-01',title:'把杯子举向镜头',label:'杭州 · 一张小合照',text:'杯子靠近镜头，笑意留在照片里。除了远处的风景，也想把坐在一起的这些小片刻收好。',photo:travelPhotos['hangzhou-autumn-05'] },
