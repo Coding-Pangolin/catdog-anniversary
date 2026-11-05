@@ -48,3 +48,8 @@
 
 /* Avoid repaint-heavy procedural grain and continuous character animation on TV WebViews. */
 .projection{background-image:none}.projection .character img{animation:none}.projection .giftBox{filter:none}
+
+.anniversaryPhoto{display:block;border:0;color:inherit;cursor:zoom-in}.passportPager{display:flex;align-items:center;gap:9px;flex-shrink:0}.passportPager>span{font-size:11px;white-space:nowrap}.passportPager .textButton{padding:4px 8px;min-width:44px}.passportPager .textButton:disabled{opacity:.3;cursor:default}.tripDetailMeta{flex-wrap:wrap}.projection .passportPager{gap:14px}.projection .passportPager>span{font-size:17px}.projection .passportPager .textButton{min-height:44px;min-width:44px}.projection .travelTop{padding-bottom:6px}.projection .travelRoute{height:334px}.projection .travelMemento{margin-top:8px}.projection .travelMemento h3{font-size:22px}.projection .travelMemento p{font-size:15px}.projection .travelMemento img:first-child{height:70px}.projection .travelMemento img:last-child{height:70px}
+
+/* Padding-ratio frames also work on TV browsers without CSS aspect-ratio. */
+.photoImage{height:0;padding-top:80%}.photoImage>img{position:absolute;top:0;left:0;width:100%;height:100%;aspect-ratio:auto;object-fit:contain}.photoImage>.photoFallback{position:absolute;top:0;left:0;width:100%;height:100%}
