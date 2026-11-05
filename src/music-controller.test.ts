@@ -34,6 +34,7 @@ describe('背景音乐与浏览器播放限制', () => {
     c.start(); c.toggle(); finish(); await tick(); expect(c.status).toBe('off');
     c.dispose(); c.retry(); expect(audio.play).toHaveBeenCalledTimes(1);
   });
+  it('重复的可见性和影片状态不会反复调用播放',async()=>{const {audio,controller:c}=setup();c.start();await tick();c.setVisible(true);c.setVideoPlaying(false);c.setVisible(true);expect(audio.play).toHaveBeenCalledTimes(1);expect(audio.pause).not.toHaveBeenCalled();});
   it('资源失败显示错误，允许主动重试', async () => {
     const {controller:c} = setup(); c.fail(); expect(c.status).toBe('error');
     c.toggle(); await tick(); expect(c.status).toBe('playing');

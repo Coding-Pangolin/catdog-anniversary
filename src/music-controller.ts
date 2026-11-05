@@ -1,4 +1,4 @@
-export type MusicStatus = 'starting' | 'playing' | 'blocked' | 'paused' | 'off' | 'error';
+export type MusicStatus = 'loading' | 'starting' | 'playing' | 'blocked' | 'paused' | 'off' | 'error';
 type Player = Pick<HTMLAudioElement, 'play' | 'pause' | 'volume' | 'loop'>;
 
 // Keep browser autoplay rejection separate from the visitor's explicit mute choice.
@@ -22,8 +22,8 @@ export class MusicController {
   }
   retry() { if (this.status === 'blocked') this.sync(); }
   mute() { this.enabled = false; this.sync(); }
-  setVisible(visible: boolean) { this.visible = visible; this.sync(); }
-  setVideoPlaying(playing: boolean) { this.videoPlaying = playing; this.sync(); }
+  setVisible(visible: boolean) { if(this.visible === visible) return; this.visible = visible; this.sync(); }
+  setVideoPlaying(playing: boolean) { if(this.videoPlaying === playing) return; this.videoPlaying = playing; this.sync(); }
   fail() { ++this.attempt; this.audio.pause(); this.report('error'); }
   private sync() {
     if (this.disposed) return;

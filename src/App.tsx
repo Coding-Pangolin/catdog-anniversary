@@ -11,6 +11,7 @@ import { moveRemoteFocus, paginateLetter } from './projector';
 import type { Direction } from './projector';
 import { MusicController } from './music-controller';
 import type { MusicStatus } from './music-controller';
+import { bufferMusic } from './buffered-music';
 
 const paperColors=['#ead2cf','#e8dcb9','#b4c8cb'];
 const ribbonColors=['#a45e67','#718e99','#b09a60'];
@@ -31,7 +32,7 @@ export default function App(){
  const [fullscreen,setFullscreen]=useState(false);const [projectionNotice,setProjectionNotice]=useState('');
  const [letterPage,setLetterPage]=useState(0);const [isPlaying,setIsPlaying]=useState(false);
  const letterPages=paginateLetter(letter.paragraphs);
- const [menu,setMenu]=useState(false);const[restart,setRestart]=useState(false);const[musicStatus,setMusicStatus]=useState<MusicStatus>('starting');const musicController=useRef<MusicController|null>(null);
+ const [menu,setMenu]=useState(false);const[restart,setRestart]=useState(false);const[musicStatus,setMusicStatus]=useState<MusicStatus>('loading');const [musicSource,setMusicSource]=useState('');const [musicLoadAttempt,setMusicLoadAttempt]=useState(0);const musicWanted=useRef(true);const musicController=useRef<MusicController|null>(null);
  const [memory,setMemory]=useState<Memory|null>(null);const[drawing,setDrawing]=useState(false);const[opened,setOpened]=useState(false);
  const [tripIndex,setTripIndex]=useState<number|null>(null);const [album,setAlbum]=useState<{photos:Photo[];index:number}|null>(null);
  const [unwrap,setUnwrap]=useState(false);const [unwrapping,setUnwrapping]=useState(false);const [hasVideo,setHasVideo]=useState(false);const[videoError,setVideoError]=useState(false);
@@ -55,14 +56,20 @@ export default function App(){
  useEffect(()=>{setStorageOK(saveProgress(p));},[p]);
  useEffect(()=>()=>timers.current.forEach(clearTimeout),[]);
  useEffect(()=>{
-  if(!music.current||!siteConfig.music)return;
+  if(!siteConfig.music)return;
+  const abort=new AbortController();let objectUrl='';
+  void bufferMusic(siteConfig.music,abort.signal).then(blob=>{if(abort.signal.aborted)return;objectUrl=URL.createObjectURL(blob);setMusicSource(objectUrl);}).catch(()=>{if(!abort.signal.aborted)setMusicStatus('error');});
+  return()=>{abort.abort();if(objectUrl)URL.revokeObjectURL(objectUrl);};
+ },[musicLoadAttempt]);
+ useEffect(()=>{
+  if(!music.current||!musicSource)return;
   const controller=new MusicController(music.current,setMusicStatus);musicController.current=controller;
   const visibility=()=>{controller.setVisible(!document.hidden);if(document.hidden)video.current?.pause();};
   const retry=(e:Event)=>{const target=e.target as Element|null;if(!target?.closest?.('[data-music-control]'))controller.retry();};
   document.addEventListener('visibilitychange',visibility);document.addEventListener('pointerdown',retry,true);document.addEventListener('keydown',retry,true);
-  if(document.hidden)controller.setVisible(false);else controller.start();
+  if(!musicWanted.current)controller.mute();else if(document.hidden)controller.setVisible(false);else if(video.current&&!video.current.ended)controller.setVideoPlaying(true);else controller.start();
   return()=>{controller.dispose();musicController.current=null;document.removeEventListener('visibilitychange',visibility);document.removeEventListener('pointerdown',retry,true);document.removeEventListener('keydown',retry,true);};
- },[]);
+ },[musicSource]);
  useEffect(()=>{if(previousChapter.current!==p.chapter){heading.current?.focus();window.scrollTo({top:0,behavior:'instant'});previousChapter.current=p.chapter;}if(p.chapter!==4){video.current?.pause();setHasVideo(false);setVideoError(false);musicController.current?.setVideoPlaying(false);}},[p.chapter]);
  function later(fn:()=>void,delay:number){timers.current.push(setTimeout(fn,delay));}
  function go(chapter:number){timers.current.forEach(clearTimeout);timers.current=[];busy.current=false;setDrawing(false);setOpened(false);setUnwrapping(false);setP(v=>({...v,chapter}));setMenu(false);setTripIndex(null);setMemory(null);setResumed(false);}
@@ -77,13 +84,17 @@ export default function App(){
  function toggleVideo(){const v=video.current;if(!v)return;if(v.paused)void v.play().catch(()=>setVideoError(true));else v.pause();}
  function seekVideo(seconds:number){const v=video.current;if(v&&Number.isFinite(v.duration))v.currentTime=Math.max(0,Math.min(v.duration,v.currentTime+seconds));}
  function openGift(){if(unwrapping)return;setUnwrapping(true);later(()=>{setUnwrap(true);setUnwrapping(false);},reduced?0:800);}
- function toggleQuiet(){musicController.current?.toggle();}
+ function toggleQuiet(){
+  if(musicController.current){musicController.current.toggle();musicWanted.current=musicController.current.enabled;return;}
+  if(musicStatus==='error'){musicWanted.current=true;setMusicStatus('loading');setMusicLoadAttempt(v=>v+1);return;}
+  musicWanted.current=!musicWanted.current;setMusicStatus(musicWanted.current?'loading':'off');
+ }
  const chapter=p.chapter;
  const identityPending=!siteConfig.anniversary||charactersPending();
  function charactersPending(){return siteConfig.names.cat==="小猫"&&siteConfig.names.dog==="小狗";}
  return <div className={`${s.app} ${reduced?s.reduceMotion:''} ${projector?s.projection:''}`} data-chapter={chapter} style={projector?{'--projector-scale':projectorScale} as CSSProperties:undefined}>
  <a href="#main" className={s.skipLink}>跳到主要内容</a>
- <header className={s.header}><button className={s.wordmark} onClick={()=>go(0)} aria-label="回到封面"><span className={s.brandIcon}><PawPrint size={20}/></span><span>{siteConfig.title}<small>OUR LITTLE CHAPTERS</small></span></button><span className={s.headerEdition}>VOL. 01 <span>／</span> FIRST ANNIVERSARY</span><div className={s.headerActions}><button className={`${s.projectionToggle} ${projector?s.projectionSelected:''}`} onClick={toggleProjector} aria-label={projector?'退出16:9投影模式':'进入16:9投影模式'} aria-pressed={projector}><Monitor size={19}/><span>{projector?'退出投影':'16:9 投影'}</span></button>{projector&&<button className={s.iconButton} onClick={()=>void toggleFullscreen()} aria-label={fullscreen?'退出全屏':'进入全屏'}>{fullscreen?<Minimize2 size={20}/>:<Maximize2 size={20}/>}</button>}<button className={s.iconButton} data-music-control="true" onClick={toggleQuiet} aria-label={musicStatus==='playing'||musicStatus==='paused'||musicStatus==='starting'?'关闭背景音乐':'播放背景音乐：怀念'} title={`怀念 · ${musicStatus==='playing'?'正在播放':musicStatus==='paused'?'暂时暂停':'点击播放或关闭'}`} aria-pressed={musicStatus==='playing'}>{musicStatus==='playing'?<Volume2 size={18}/>:<VolumeX size={18}/>}</button><button className={`${s.iconButton} ${reduced?s.activeIcon:''}`} aria-label={p.reduced?'恢复动态效果':'减少动态效果'} aria-pressed={p.reduced} onClick={()=>setP(v=>({...v,reduced:!v.reduced}))}><Wind size={18}/></button><button className={s.menuButton} aria-label="打开章节目录" onClick={()=>setMenu(true)}><Menu size={18}/><span>目录</span></button></div></header>
+ <header className={s.header}><button className={s.wordmark} onClick={()=>go(0)} aria-label="回到封面"><span className={s.brandIcon}><PawPrint size={20}/></span><span>{siteConfig.title}<small>OUR LITTLE CHAPTERS</small></span></button><span className={s.headerEdition}>VOL. 01 <span>／</span> FIRST ANNIVERSARY</span><div className={s.headerActions}><button className={`${s.projectionToggle} ${projector?s.projectionSelected:''}`} onClick={toggleProjector} aria-label={projector?'退出16:9投影模式':'进入16:9投影模式'} aria-pressed={projector}><Monitor size={19}/><span>{projector?'退出投影':'16:9 投影'}</span></button>{projector&&<button className={s.iconButton} onClick={()=>void toggleFullscreen()} aria-label={fullscreen?'退出全屏':'进入全屏'}>{fullscreen?<Minimize2 size={20}/>:<Maximize2 size={20}/>}</button>}<button className={s.iconButton} data-music-control="true" onClick={toggleQuiet} aria-label={musicStatus==='playing'||musicStatus==='paused'||musicStatus==='starting'||musicStatus==='loading'?'关闭背景音乐':'播放背景音乐：怀念'} title={`怀念 · ${musicStatus==='playing'?'正在播放':musicStatus==='paused'?'暂时暂停':'点击播放或关闭'}`} aria-pressed={musicStatus==='playing'}>{musicStatus==='playing'?<Volume2 size={18}/>:<VolumeX size={18}/>}</button><button className={`${s.iconButton} ${reduced?s.activeIcon:''}`} aria-label={p.reduced?'恢复动态效果':'减少动态效果'} aria-pressed={p.reduced} onClick={()=>setP(v=>({...v,reduced:!v.reduced}))}><Wind size={18}/></button><button className={s.menuButton} aria-label="打开章节目录" onClick={()=>setMenu(true)}><Menu size={18}/><span>目录</span></button></div></header>
  <div className={s.chapterProgress} aria-label={`第 ${chapter+1} 章，共 8 章`}>{chapters.map((name,i)=><button key={name} className={i<=chapter?s.progressActive:''} aria-label={`第 ${i+1} 章：${name}`} aria-current={i===chapter?'step':undefined} onClick={()=>go(i)}/>)}</div>
  {resumed&&!projector&&<div className={s.resume}>接着上次，翻到「{chapters[chapter]}」<button onClick={()=>go(0)}>从封面开始 <ArrowRight size={14}/></button><button className={s.iconButton} aria-label="关闭继续阅读提示" onClick={()=>setResumed(false)}><X size={15}/></button></div>}
  {!storageOK&&!projector&&<div className={s.storageNotice} role="status">本机进度暂时无法保存，仍可完整翻阅这本手账。</div>}
@@ -105,10 +116,10 @@ export default function App(){
  {chapter>0&&chapter<7&&<nav className={s.chapterNav} aria-label="章节导航"><button className={s.textButton} onClick={()=>go(chapter-1)}><ArrowLeft size={16}/>上一章</button><span>{numbers[chapter]} / 08</span><button className={s.primaryButton} data-primary="true" onClick={()=>go(chapter+1)}>{['','把日常也收藏起来','一起翻开旅行护照','留一张电影票','把心意包起来','把想念送过去','还有一封信'][chapter]}<ArrowRight size={17}/></button></nav>}
  </main>
  <footer className={s.footer}><span><PawPrint size={13}/> 猫狗的一周年</span><span>{projector?"遥控器方向键选择 · 确认键打开 · 菜单自由翻阅":"MADE OF LITTLE MOMENTS, AND LOVE."}</span><button onClick={()=>go(7)}>直接读信 <ArrowUpRight size={13}/></button></footer>
- {siteConfig.music&&<audio ref={music} src={siteConfig.music} loop preload="none" onError={()=>musicController.current?.fail()}/>}
+ {siteConfig.music&&<audio ref={music} src={musicSource||undefined} loop preload="auto" onError={()=>musicController.current?.fail()}/>}
  {menu&&<Dialog title="翻开这一年的目录" onClose={()=>setMenu(false)}><div className={s.contents}><p>按顺序慢慢看，也可以直接去想看的那一页。</p>{chapters.map((name,i)=><button key={name} className={i===chapter?s.currentChapter:''} onClick={()=>go(i)}><span>{numbers[i]}</span><strong>{name}</strong>{i===chapter?<span className={s.currentLabel}>正在这里</span>:<ArrowUpRight size={17}/>}</button>)}<div className={s.contentsFoot}><button className={s.textButton} aria-pressed={p.reduced} onClick={()=>setP(v=>({...v,reduced:!v.reduced}))}>{p.reduced?"恢复动态效果":"减少动态效果"}<Wind size={15}/></button>{(memories.some(m=>m.placeholder)||trips.some(t=>t.placeholder)||letter.placeholder)&&<PlaceholderTag>真实照片与文案待补</PlaceholderTag>}<button className={s.textButton} onClick={()=>{setMenu(false);setRestart(true);}}>重新开始 <RotateCcw size={14}/></button></div></div></Dialog>}
  {restart&&<Dialog title="重新翻开这本手账？" onClose={()=>setRestart(false)}><div className={s.confirmBody}><RotateCcw size={30}/><p>这会清除此浏览器的章节进度、抽卡记录和礼盒选择。照片、故事和信件不会被删除。</p><div><button className={s.secondaryButton} onClick={()=>setRestart(false)}>继续保留</button><button className={s.primaryButton} onClick={reset}>清除进度并重开</button></div></div></Dialog>}
- {siteConfig.music&&(musicStatus==='blocked'||musicStatus==='error')&&<div className={s.musicNotice} role="status"><span>{musicStatus==='blocked'?'♫ 怀念 · 轻触页面或按确认键，音乐就开始。':'背景音乐暂时未能加载，仍可继续翻阅。'}</span><button data-music-control="true" onClick={toggleQuiet}>{musicStatus==='blocked'?'播放音乐':'重试'}</button><button data-music-control="true" aria-label="关闭背景音乐提示并静音" onClick={()=>{musicController.current?.mute();}}><X size={16}/></button></div>}
+ {siteConfig.music&&(musicStatus==='loading'||musicStatus==='blocked'||musicStatus==='error')&&<div className={s.musicNotice} role="status"><span>{musicStatus==='loading'?'♫ 怀念 · 音乐准备中，可以先翻阅。':musicStatus==='blocked'?'♫ 怀念 · 轻触页面或按确认键，音乐就开始。':'背景音乐暂时未能加载，仍可继续翻阅。'}</span><button data-music-control="true" onClick={toggleQuiet}>{musicStatus==='loading'?'静音':musicStatus==='blocked'?'播放音乐':'重试'}</button><button data-music-control="true" aria-label="关闭背景音乐提示并静音" onClick={()=>{musicWanted.current=false;musicController.current?.mute();setMusicStatus('off');}}><X size={16}/></button></div>}
  {memory&&<Dialog title="一颗小小的回忆" onClose={()=>setMemory(null)}><article className={s.memoryDetail}><span className={s.tiny}>{memory.label}</span><h2>{memory.title}</h2><PhotoView photo={memory.photo} onClick={()=>setAlbum({photos:[memory.photo],index:0})}/><p>{memory.text}</p>{memory.placeholder&&<PlaceholderTag>这是一张待填写的回忆卡</PlaceholderTag>}<button className={s.secondaryButton} onClick={()=>setMemory(null)}>放回收藏架 <ArrowRight size={16}/></button></article></Dialog>}
  {tripIndex!==null&&<Dialog title={`旅行手账 · ${numbers[tripIndex]}`} onClose={()=>setTripIndex(null)} wide><article className={s.tripDetail}><div className={s.tripDetailMeta}><span>{trips[tripIndex].label}</span>{trips[tripIndex].placeholder&&<PlaceholderTag>真实旅程待补</PlaceholderTag>}</div><h2>{trips[tripIndex].title}</h2><p className={s.tripSubtitle}>{trips[tripIndex].subtitle}</p><div className={s.albumGrid}>{trips[tripIndex].photos.map((photo,i)=><PhotoView key={photo.id} photo={photo} onClick={()=>setAlbum({photos:trips[tripIndex].photos,index:i})}/>)}</div><p className={s.tripStory}>{trips[tripIndex].story}</p><div className={s.keepsake}><Ticket size={21}/><span>{trips[tripIndex].keepsake}</span></div><nav className={s.tripNav}><button className={s.secondaryButton} disabled={tripIndex===0} onClick={()=>openTrip(tripIndex-1)}><ArrowLeft size={15}/>上一段旅程</button><button className={s.textButton} onClick={()=>setTripIndex(null)}>回到护照</button><button className={s.secondaryButton} disabled={tripIndex===trips.length-1} onClick={()=>openTrip(tripIndex+1)}>下一段旅程<ArrowRight size={15}/></button></nav></article></Dialog>}
  {album&&<Lightbox photos={album.photos} index={album.index} setIndex={index=>setAlbum({...album,index})} onClose={()=>setAlbum(null)}/>}
