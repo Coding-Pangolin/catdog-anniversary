@@ -3,7 +3,7 @@ export type Photo = { id: string; src: string; thumbnail?: string; alt: string; 
 export type Memory = { id: string; title: string; label: string; text: string; photo: Photo; placeholder?: boolean };
 export type Trip = { id: string; title: string; label: string; subtitle: string; story: string; keepsake: string; photos: Photo[]; placeholder?: boolean };
 const placeholderPhoto = (id: string, kind = 'together'): Photo => ({ id, src: assetUrl(`/assets/photo-${kind}.svg`), alt: '留给真实照片的位置，目前为手账占位插画', caption: '照片待补 · 这里会放你们的真实记录', width: 800, height: 640, placeholder: true });
-export const siteConfig = { title: '猫狗的一周年', anniversary: null as string | null, timezone: 'Asia/Shanghai', coverPhoto: null as Photo | null, names: { cat: '小猫', dog: '小狗' }, music: null as string | null, video: assetUrl('/media/this-time-goodnight-v2.mp4') };
+export const siteConfig = { title: '猫狗的一周年', anniversary: null as string | null, timezone: 'Asia/Shanghai', coverPhoto: null as Photo | null, names: { cat: '小猫', dog: '小狗' }, music: assetUrl('/media/huai-nian.mp3') as string | null, video: assetUrl('/media/this-time-goodnight-v2.mp4') };
 export const characters = [{ id:'cat',name:'小猫',image:assetUrl('/assets/phone_cat.webp'),person:null },{ id:'dog',name:'小狗',image:assetUrl('/assets/phone_dog.webp'),person:null },{ id:'panda',name:'胖达',image:assetUrl('/assets/panda.webp'),person:null },{ id:'pillowdog',name:'枕头狗',image:assetUrl('/assets/pillowdog.webp'),person:null }];
 export const memories: Memory[] = [
  { id:'memory-01',title:'一声晚安，跨过距离',label:'异地日常 · 待补',text:'这里留给你们一次真实的晚安。可以写下那天聊了什么，或一句只有彼此才懂的话。',photo:placeholderPhoto('memory-photo-01','night'),placeholder:true },
