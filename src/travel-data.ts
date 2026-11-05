@@ -562,7 +562,7 @@ const tripRecords = [
     "subtitle": "红楼梯与举杯的小合照",
     "story": "红色楼梯、并肩的镜子照，还有碰到镜头前的一只杯子。这一页，把照片里的笑意放在一起。",
     "keepsake": "记一张合照，也记一个小表情。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "hangzhou-autumn-01",
       "hangzhou-autumn-02",
@@ -579,7 +579,7 @@ const tripRecords = [
     "subtitle": "海边的白天，亮灯的夜晚",
     "story": "明亮的落地窗外是水面，夜晚的灯光又换了一种颜色。把同一座城市的白天和夜晚，收在这一页。",
     "keepsake": "从窗边的水面，翻到夜里的灯光。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "shenzhen-01",
       "shenzhen-02",
@@ -598,7 +598,7 @@ const tripRecords = [
     "subtitle": "湖边站在一起的那张照片",
     "story": "湖水、远山，还有并肩站着的两个人。另一张照片里，杯子也一起入了镜。风景和小小的日常，都值得留下。",
     "keepsake": "一张湖边合照，留给周年贺卡。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "hangzhou-lakeside-01",
       "hangzhou-lakeside-02"
@@ -612,7 +612,7 @@ const tripRecords = [
     "subtitle": "把秋冬的颜色慢慢收好",
     "story": "黄色树叶、夜里的长椅，还有面对城市天际线的背影。换一个季节，照片里就多了一种颜色。",
     "keepsake": "树叶落下，照片把颜色留下。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "hangzhou-winter-01",
       "hangzhou-winter-02",
@@ -629,7 +629,7 @@ const tripRecords = [
     "subtitle": "围巾、红墙与两顶小帽子",
     "story": "红色围巾和黄色围巾，把冬日合照裹得暖暖的。红墙前留一张，戴上小能猫帽子再留一张；夜里，两杯饮品也值得入册。",
     "keepsake": "把冬天穿得暖暖的，也拍得暖暖的。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "nanjing-01",
       "nanjing-02",
@@ -648,7 +648,7 @@ const tripRecords = [
     "subtitle": "靠在一起，把夜色也带走",
     "story": "一张靠在一起的合照，一张红色装置前的合照，还有夜色里各自入镜的片刻。把这些不同的画面，放进广州这一页。",
     "keepsake": "白天靠近一点，夜里也留一张。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "guangzhou-01",
       "guangzhou-02",
@@ -663,7 +663,7 @@ const tripRecords = [
     "subtitle": "绿荫、窗边和同框的我们",
     "story": "树荫下的一张合照，窗边的一点暖色，还有镜子与亭檐前的身影。照片里的绿色和笑意，刚好装满这一页。",
     "keepsake": "把一路的绿，也一起带回照片里。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "changsha-01",
       "changsha-02",
@@ -679,7 +679,7 @@ const tripRecords = [
     "subtitle": "从白天的合照，翻到蓝色夜幕",
     "story": "白天把两个人拍进同一张照片，傍晚把天空拍成蓝色。两张单人照拼在一起，夜里的合照再接着往下写。",
     "keepsake": "同一片天空，也可以分两张收藏。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "taizhou-01",
       "taizhou-02",
@@ -693,9 +693,9 @@ const tripRecords = [
     "title": "湖州&宁波",
     "label": "2026.06",
     "subtitle": "水边的风与六月的绿荫",
-    "story": "这一组沿用素材里的“湖州&宁波”分组：水边的栏杆、绿荫下的石阶，还有一张靠近镜头的合照。具体地点以后再慢慢补上。",
+    "story": "这一组沿用素材里的“湖州&宁波”分组：水边的栏杆、绿荫下的石阶，还有一张靠近镜头的合照。把这些水边和绿荫下的片刻，都好好收在这一页。",
     "keepsake": "沿着水面与绿荫，收藏六月的片刻。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "huzhou-ningbo-01",
       "huzhou-ningbo-02",
@@ -714,7 +714,7 @@ const tripRecords = [
     "subtitle": "亮灯的夜，与大猫大狗打招呼",
     "story": "水边的灯光给合照添了一层暖色，橙色花朵旁也留了一张。再翻一页，和大猫、大狗分别同框，像把手账里的伙伴带进了照片。",
     "keepsake": "有夜里的合照，也有大猫大狗的陪伴。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "suzhou-01",
       "suzhou-02",
@@ -730,7 +730,7 @@ const tripRecords = [
     "subtitle": "湖水、山和一跃而起的快乐",
     "story": "蓝色湖面和远处的山，给照片留了很大的背景。石头上坐一坐，也可以对着镜头跳起来；等光变柔，再把傍晚留下。",
     "keepsake": "把跳起来的那一瞬，也好好收住。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "yuxi-01",
       "yuxi-02",
@@ -748,7 +748,7 @@ const tripRecords = [
     "subtitle": "菌菇、咖啡与拍立得",
     "story": "从摆满菌菇的摊位，走到放着两杯咖啡的小桌。镜子合照和摊开的拍立得，把这一组照片串成了一页。",
     "keepsake": "把桌上的两杯，也变成一张回忆卡。",
-    "timeNote": "按照片时间整理 · 可调整",
+    "timeNote": "一路有你",
     "photoIds": [
       "kunming-01",
       "kunming-02",
