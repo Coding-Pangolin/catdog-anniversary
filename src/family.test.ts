@@ -4,13 +4,12 @@ import { familyMembers } from './family-data';
 import { familyPhotos } from './family-photos';
 import { freshProgress, nextMemory, restoreProgress } from './state';
 
-it('两位主角与四位毛绒家人都有独立身份，喵喵是大黄狗', () => {
+it('两位主角与四位家人都有独立身份，公开文案不作物品分类', () => {
   expect(characters).toHaveLength(6);
   expect(new Set(characters.map(character=>character.id)).size).toBe(6);
   expect(familyMembers.map(member=>member.name)).toEqual(['胖达','枕头狗','喵喵','布拉肠']);
-  expect(familyMembers.find(member=>member.id==='panda')?.kind).toBe('黑白狗玩偶');
-  expect(familyMembers.find(member=>member.id==='miaomiao')?.kind).toBe('大黄狗玩偶');
-  expect(familyMembers.find(member=>member.id==='bulachang')?.kind).toBe('腊肠狗玩偶');
+  for(const member of familyMembers) expect(member.kind+member.description).not.toContain('玩偶');
+  expect(familyMembers.find(member=>member.id==='panda')?.detailPhoto.id).toBe('family-panda-journal');
 });
 
 it('成员头像引用真实照片，显示区域没有超出原图', () => {
