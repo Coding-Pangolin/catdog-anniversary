@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="150 350 360 550" width="1000" height="950"><defs>
+ <linearGradient id="cat" x2=".7" y2="1"><stop stop-color="#efddbb" /><stop offset="1" stop-color="#d6bd96" /></linearGradient>
+ <linearGradient id="dog" x2="1" y2=".8"><stop stop-color="#d9b487" /><stop offset="1" stop-color="#c39868" /></linearGradient>
+ <linearGradient id="vest" x2="1" y2="1"><stop stop-color="#a3aaa1" /><stop offset="1" stop-color="#7e8984" /></linearGradient>
+ <linearGradient id="teal" x2=".8" y2="1"><stop stop-color="#8bbcb4" /><stop offset="1" stop-color="#5c9999" /></linearGradient>
+ <style>.ink{stroke:#383e35;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.fine{stroke:#42463a;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;fill:none}.pencil{stroke:#6d654e;stroke-width:1.2;stroke-linecap:round;fill:none;opacity:.45}</style>
+</defs>
+<path d="M276 572 C247 605 242 647 251 688 C260 725 275 759 300 778 C324 797 370 789 389 770 C407 747 408 714 398 685 L389 620 L369 574Z" fill="url(#cat)" class="ink" />
+<path d="M290 596 C270 629 268 668 281 705 C289 729 309 740 329 737" fill="#f6e8cd" opacity=".4" />
+<path d="M209 630 L197 642 M257 696 L263 710 M389 704 L390 724" class="pencil" />
+</svg>

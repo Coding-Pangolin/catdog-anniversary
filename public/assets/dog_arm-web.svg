@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="530 200 440 700" width="1000" height="950"><defs>
+ <linearGradient id="cat" x2=".7" y2="1"><stop stop-color="#efddbb" /><stop offset="1" stop-color="#d6bd96" /></linearGradient>
+ <linearGradient id="dog" x2="1" y2=".8"><stop stop-color="#d9b487" /><stop offset="1" stop-color="#c39868" /></linearGradient>
+ <linearGradient id="vest" x2="1" y2="1"><stop stop-color="#a3aaa1" /><stop offset="1" stop-color="#7e8984" /></linearGradient>
+ <linearGradient id="teal" x2=".8" y2="1"><stop stop-color="#8bbcb4" /><stop offset="1" stop-color="#5c9999" /></linearGradient>
+ <style>.ink{stroke:#383e35;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.fine{stroke:#42463a;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;fill:none}.pencil{stroke:#6d654e;stroke-width:1.2;stroke-linecap:round;fill:none;opacity:.45}</style>
+</defs>
+<path d="M702 439 C715 447 723 466 726 490 L738 556 C742 578 755 599 762 616 L759 645 L747 641 L733 627 C719 613 706 586 700 559 L680 476Z" fill="url(#dog)" class="ink" />
+<path d="M742 622 L748 635 M718 544 L722 564" class="pencil" />
+</svg>

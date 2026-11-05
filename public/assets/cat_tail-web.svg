@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="150 350 360 550" width="1000" height="950"><defs>
+ <linearGradient id="cat" x2=".7" y2="1"><stop stop-color="#efddbb" /><stop offset="1" stop-color="#d6bd96" /></linearGradient>
+ <linearGradient id="dog" x2="1" y2=".8"><stop stop-color="#d9b487" /><stop offset="1" stop-color="#c39868" /></linearGradient>
+ <linearGradient id="vest" x2="1" y2="1"><stop stop-color="#a3aaa1" /><stop offset="1" stop-color="#7e8984" /></linearGradient>
+ <linearGradient id="teal" x2=".8" y2="1"><stop stop-color="#8bbcb4" /><stop offset="1" stop-color="#5c9999" /></linearGradient>
+ <style>.ink{stroke:#383e35;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.fine{stroke:#42463a;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;fill:none}.pencil{stroke:#6d654e;stroke-width:1.2;stroke-linecap:round;fill:none;opacity:.45}</style>
+</defs>
+<path d="M312 733 C262 750 220 741 178 708 L133 669 L137 696 L114 692 L130 719 L120 732 L146 737 L139 756 L166 760 L172 775 L198 775 L207 791 L237 788 L255 804 C286 813 319 797 336 778Z" fill="url(#cat)" class="ink" />
+<path d="M156 724 C183 759 226 780 260 780" class="pencil" />
+</svg>
