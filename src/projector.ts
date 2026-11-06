@@ -18,13 +18,24 @@ export function nextFocusIndex(current: FocusBox, candidates: FocusBox[], direct
 /** Break long paragraphs into readable projection pages without dropping text. */
 export function paginateLetter(paragraphs: string[], budget=120): string[][] {
  const limit=Math.max(1,Math.floor(budget));
- const chunks=paragraphs.flatMap(paragraph=>{
-  const chars=Array.from(paragraph);const result:string[]=[];
-  for(let start=0;start<chars.length;start+=limit)result.push(chars.slice(start,start+limit).join(''));
-  return result;
- });
  const pages:string[][]=[];let page:string[]=[];let length=0;
- chunks.forEach(chunk=>{const size=Array.from(chunk).length;if(page.length&&(length+size>limit||page.length>=3)){pages.push(page);page=[];length=0;}page.push(chunk);length+=size;});
+ const flush=()=>{if(page.length)pages.push(page);page=[];length=0;};
+ paragraphs.forEach(paragraph=>{
+  let chars=Array.from(paragraph);
+  while(chars.length){
+   if(page.length&&(page.length>=3||limit-length<Math.min(40,chars.length)))flush();
+   const room=limit-length;let end=Math.min(room,chars.length);
+   if(end<chars.length){
+    // Prefer complete sentences, then clauses; never start a page with punctuation.
+    const minimum=Math.ceil(end/2);
+    const boundary=(pattern:RegExp)=>{for(let i=end-1;i>=minimum-1;i--)if(pattern.test(chars[i]))return i+1;return 0;};
+    end=boundary(/[。！？；]/)||boundary(/[，、：]/)||end;
+    while(end>1&&/^[，。！？；：、”’」』）】]$/.test(chars[end]))end--;
+   }
+   page.push(chars.slice(0,end).join(''));length+=end;chars=chars.slice(end);
+   if(chars.length)flush();
+  }
+ });
  if(page.length)pages.push(page);
  return pages.length?pages:[[]];
 }
